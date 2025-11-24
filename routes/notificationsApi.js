@@ -8,6 +8,66 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/notifications:
+ *   get:
+ *     summary: Get paginated notifications for the authenticated user.
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Notifications returned.
+ * /api/delete-notification/{id}:
+ *   delete:
+ *     summary: Delete a notification by ID.
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Notification deleted.
+ * /api/notifications/delete-all:
+ *   delete:
+ *     summary: Delete all notifications for the authenticated user.
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All notifications deleted.
+ * /api/notifications/mark-all-read:
+ *   post:
+ *     summary: Mark all notifications as read.
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Notifications marked read.
+ * /api/notifications/{id}/mark-read:
+ *   post:
+ *     summary: Mark a specific notification as read.
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Notification marked as read.
+ */
 router.get('/notifications', verifyToken, requirePermission("view_notification"), async (req, res) => {
   try {
     logger.info("get notifications by user: ",{ admin: req.user, user_id: req.user.id });

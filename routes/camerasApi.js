@@ -9,6 +9,143 @@ const { getCamerasWithStatus , excecuteCameraBySocket} = require('../app');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/cameras:
+ *   get:
+ *     summary: Get paginated cameras.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Cameras returned.
+ * /api/camera/{camera_id}:
+ *   get:
+ *     summary: Get a camera by ID.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: camera_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Camera returned.
+ * /api/create-camera:
+ *   post:
+ *     summary: Create a new camera.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pole_id:
+ *                 type: integer
+ *               camera_ip:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Camera created.
+ * /api/update-camera/{id}:
+ *   put:
+ *     summary: Update a camera.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Camera updated.
+ * /api/delete-camera/{id}:
+ *   delete:
+ *     summary: Soft delete a camera.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Camera deleted.
+ * /api/restore-camera/{id}:
+ *   put:
+ *     summary: Restore a deleted camera.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Camera restored.
+ * /api/cameras-pole/{pole_id}:
+ *   get:
+ *     summary: Get paginated cameras for a pole.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: pole_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Cameras for the pole returned.
+ * /api/cameras-zone/{zone_id}:
+ *   get:
+ *     summary: Get paginated cameras for a zone.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: zone_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Cameras for the zone returned.
+ * /api/cameras_with_status/{pole_code}:
+ *   get:
+ *     summary: Get cameras with status for a pole code.
+ *     tags: [Cameras]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: pole_code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Cameras status list returned.
+ */
 // Get all cameras without pagination
 router.get('/cameras', verifyToken, requirePermission("view_camera"), async (req, res) => {
   try {

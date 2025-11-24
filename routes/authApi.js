@@ -8,6 +8,31 @@ const { generateToken, verifyToken } = require('../config/auth');
 const moment = require('moment');
 const logger = require('../utils/logger');
 
+/**
+ * @openapi
+ * /api/login:
+ *   post:
+ *     summary: Authenticate a user and return a JWT token.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, password]
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       200:
+ *         description: Login successful and token returned.
+ *       401:
+ *         description: Invalid credentials provided.
+ */
 // POST /api/login
 router.post('/login', upload.none(), async (req, res) => {
   logger.info("Login tryieng: ",{ body: req.body });
@@ -39,6 +64,20 @@ router.post('/login', upload.none(), async (req, res) => {
 //   }
 // });
 
+/**
+ * @openapi
+ * /api/profile:
+ *   get:
+ *     summary: Fetch the authenticated user profile and permissions.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Authenticated user profile returned.
+ *       401:
+ *         description: Unauthorized request.
+ */
 // GET /api/profile (Protected route)
 // router.get('/profile', verifyToken, async (req, res) => {
 //   req.user.iat = moment.unix(req.user.iat).format("YYYY-MM-DD HH:mm:ss");
