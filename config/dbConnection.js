@@ -1,15 +1,17 @@
-var connection = require('./db_config');
 const mysql = require('mysql2/promise');
-async function connectDB() {
-  return await mysql.createConnection({
-    host: connection.connection.host,
-    user: connection.connection.user,
-    password: connection.connection.password,
-    database: connection.database,
-  });
-}
+const connection = require('./db_config');
 
-module.exports = connectDB;
+const pool = mysql.createPool({
+  host: connection.connection.host,
+  user: connection.connection.user,
+  password: connection.connection.password,
+  database: connection.database,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+module.exports = pool;
 
 
 // exports.connectDB = () =>{
