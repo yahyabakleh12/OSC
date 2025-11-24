@@ -1,13 +1,8 @@
-var connectDB = require('../config/dbConnection');
+const pool = require('../config/dbConnection');
 
 async function mainQuery(query) {
-  const db = await connectDB();
-  try{
-    const [rows] = await db.execute(query);
-    return rows;
-  } finally {
-    await db.end();
-  }
+  const [rows] = await pool.query(query);
+  return rows;
 }
 
 exports.getZonesTotalCount = async () => {

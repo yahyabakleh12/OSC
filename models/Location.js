@@ -1,14 +1,9 @@
-var connectDB = require('../config/dbConnection');
+const pool = require('../config/dbConnection');
 const bcrypt = require('bcrypt');
 
 async function mainQuery(query) {
-  const db = await connectDB();
-  try{
-    const [rows] = await db.execute(query);
-    return rows;
-  } finally {
-    await db.end();
-  }
+  const [rows] = await pool.query(query);
+  return rows;
 }
 
 exports.getLocationsTotalCount = async () => {

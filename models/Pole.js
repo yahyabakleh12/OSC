@@ -1,15 +1,8 @@
-var connectDB = require('../config/dbConnection');
-var { basicConnection } = require("../config/basicConnection");
+const pool = require('../config/dbConnection');
 
 async function mainQuery(query) {
-  const db = await connectDB();
-  try{
-    const [rows] = await db.execute(query);
-    // console.log(rows);
-    return rows;
-  } finally {
-    await db.end();
-  }
+  const [rows] = await pool.query(query);
+  return rows;
 }
 
 // exports.getPoles =  () => {
@@ -17,14 +10,20 @@ async function mainQuery(query) {
 //   return  mainQuery(insertQuery);
 // }
 
-exports.getBasicPole = (callback) => {
-  basicConnection.query("SELECT * FROM poles", (err, results) => {
-    if (err) {
-      console.error("Error running query:", err);
-      return callback(err, null);
+exports.getBasicPole = async (callback) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM poles");
+    if (callback) {
+      callback(null, rows);
     }
-    callback(null, results);
-  });
+    return rows;
+  } catch (err) {
+    if (callback) {
+      callback(err, null);
+      return null;
+    }
+    throw err;
+  }
 };
 
 exports.getPolesTotalCount = async () => {
