@@ -8,6 +8,18 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/locations-all:
+ *   get:
+ *     summary: Get all locations without pagination.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all locations.
+ */
 // get all locations without paginate
 router.get('/locations-all', verifyToken, requirePermission("view_location"), async (req, res) => {
   try {
@@ -26,6 +38,27 @@ router.get('/locations-all', verifyToken, requirePermission("view_location"), as
   }
 });
 
+/**
+ * @openapi
+ * /api/locations:
+ *   get:
+ *     summary: Get paginated locations with totals and zones count.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Paginated locations list.
+ */
 // get locations paginate with total and zones count
 router.get('/locations', verifyToken, requirePermission("view_location"), async (req, res) => {
   try {
@@ -53,6 +86,24 @@ router.get('/locations', verifyToken, requirePermission("view_location"), async 
   }
 });
 
+/**
+ * @openapi
+ * /api/location/{location_id}:
+ *   get:
+ *     summary: Get a location by ID.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: location_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Location details returned.
+ */
 // get location by id
 router.get('/location/:location_id', verifyToken, requirePermission("view_location"), async (req, res) => {
   try {
@@ -72,7 +123,36 @@ router.get('/location/:location_id', verifyToken, requirePermission("view_locati
   }
 });
 
-// create new location 
+/**
+ * @openapi
+ * /api/create-location:
+ *   post:
+ *     summary: Create a new location.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               boundary:
+ *                 type: string
+ *               camera_user:
+ *                 type: string
+ *               camera_pass:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Location created successfully.
+ */
+// create new location
 router.post('/create-location', verifyToken, requirePermission("create_location"), upload.none(), async (req, res) => {
   try {
     logger.info("create location: ",{ admin: req.user, body: req.body });
@@ -105,7 +185,36 @@ router.post('/create-location', verifyToken, requirePermission("create_location"
   }
 });
 
-// update location 
+/**
+ * @openapi
+ * /api/update-location/{id}:
+ *   put:
+ *     summary: Update an existing location.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Location updated successfully.
+ */
+// update location
 router.put('/update-location/:id', upload.none(), verifyToken, requirePermission("edit_location"), async (req, res) => {
   try {
     logger.info("update location: ",{ admin: req.user, body: req.body });
@@ -139,6 +248,24 @@ router.put('/update-location/:id', upload.none(), verifyToken, requirePermission
   }
 });
 
+/**
+ * @openapi
+ * /api/delete-location/{id}:
+ *   delete:
+ *     summary: Soft delete a location by ID.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Location deleted.
+ */
 // delete location
 router.delete('/delete-location/:id', verifyToken, requirePermission("delete_location"), async (req, res) => {
   try {
@@ -163,6 +290,24 @@ router.delete('/delete-location/:id', verifyToken, requirePermission("delete_loc
   }
 });
 
+/**
+ * @openapi
+ * /api/restore-location/{id}:
+ *   put:
+ *     summary: Restore a deleted location.
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Location restored successfully.
+ */
 // restore location
 router.put('/restore-location/:id', verifyToken, requirePermission("restore_location"), async (req, res) => {
   try {

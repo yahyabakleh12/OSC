@@ -8,6 +8,100 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/users:
+ *   get:
+ *     summary: Get paginated users.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Users returned.
+ * /api/user/{user_id}:
+ *   get:
+ *     summary: Get a user by ID.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User returned.
+ * /api/create-user:
+ *   post:
+ *     summary: Create a new user.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               designation:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User created.
+ * /api/update-user/{id}:
+ *   put:
+ *     summary: Update a user.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User updated.
+ * /api/delete-user/{id}:
+ *   delete:
+ *     summary: Soft delete a user.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User deleted.
+ * /api/restore-user/{id}:
+ *   put:
+ *     summary: Restore a deleted user.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User restored.
+ */
 // get users paginate
 router.get('/users', verifyToken, requirePermission("view_user"), async (req, res) => {
   try {

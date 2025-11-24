@@ -9,6 +9,122 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/poles:
+ *   get:
+ *     summary: Get paginated poles with zone names and camera counts.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Poles returned.
+ * /api/pole/{pole_id}:
+ *   get:
+ *     summary: Get pole details by ID.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: pole_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pole returned.
+ * /api/create-pole:
+ *   post:
+ *     summary: Create a new pole.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               zone_id:
+ *                 type: integer
+ *               code:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Pole created.
+ * /api/update-pole/{id}:
+ *   put:
+ *     summary: Update a pole.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pole updated.
+ * /api/delete-pole/{id}:
+ *   delete:
+ *     summary: Soft delete a pole.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pole deleted.
+ * /api/restore-pole/{id}:
+ *   put:
+ *     summary: Restore a deleted pole.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pole restored.
+ * /api/poles-zone/{zone_id}:
+ *   get:
+ *     summary: Get paginated poles for a zone.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: zone_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Poles for the zone returned.
+ * /api/poles_with_status:
+ *   get:
+ *     summary: Get poles with their online status.
+ *     tags: [Poles]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Poles status list returned.
+ */
 router.get('/poles', verifyToken, requirePermission("view_pole"), async (req, res) => {
   try {
     logger.info("get poles: ",{ admin: req.user });

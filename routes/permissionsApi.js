@@ -8,6 +8,50 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/user/{user_id}/permissions:
+ *   get:
+ *     summary: Get permissions for a user with status flags.
+ *     tags: [Permissions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User permissions returned.
+ * /api/user-permissions/{user_id}:
+ *   put:
+ *     summary: Update permissions for a user.
+ *     tags: [Permissions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               permissions:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: User permissions updated.
+ */
 router.get('/user/:user_id/permissions', verifyToken, requirePermission("view_permission"), async (req, res) => {
   try {
     logger.info("get user permissions by user_d: ",{ admin: req.user, user_id: req.params.user_id });

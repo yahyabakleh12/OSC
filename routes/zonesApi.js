@@ -8,6 +8,113 @@ const Pagination = require('../utils/pagination');
 const logger = require('../utils/logger');
 const { requirePermission } = require("../middleware/permission_middleware");
 
+/**
+ * @openapi
+ * /api/zones:
+ *   get:
+ *     summary: Get paginated zones with location names and pole counts.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Zones returned.
+ * /api/zone/{zone_id}:
+ *   get:
+ *     summary: Get a specific zone by ID.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: zone_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zone details returned.
+ * /api/create-zone:
+ *   post:
+ *     summary: Create a new zone.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Zone created.
+ * /api/update-zone/{id}:
+ *   put:
+ *     summary: Update an existing zone.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zone updated.
+ * /api/delete-zone/{id}:
+ *   delete:
+ *     summary: Soft delete a zone.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zone deleted.
+ * /api/restore-zone/{id}:
+ *   put:
+ *     summary: Restore a deleted zone.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zone restored.
+ * /api/zones-location/{location_id}:
+ *   get:
+ *     summary: Get zones for a specific location.
+ *     tags: [Zones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: location_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zones for the location returned.
+ */
 // get zones without paginate
 router.get('/zones', verifyToken, requirePermission("view_zone"), async (req, res) => {
   try {

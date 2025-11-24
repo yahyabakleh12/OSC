@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require("fs");
 const morgan = require("morgan");
+const swaggerUi = require('swagger-ui-express');
 const app = express();
       app.use(express.json());
       app.use(express.urlencoded({ extended: false }));
@@ -28,6 +29,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 const port = process.env.PORT;
 const moment = require('moment');
 const formatLog = require("./utils/reports");
+const swaggerSpec = require('./config/swagger');
 const {
   deviceOn,
   deviceOff,
@@ -115,6 +117,8 @@ module.exports = { getDevicesWithStatus,getCamerasWithStatus, excecuteCameraBySo
 // Routes
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/docs.json', (req, res) => res.json(swaggerSpec));
 
 // // socket start code
 // // ==========================================================
