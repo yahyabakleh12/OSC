@@ -38,5 +38,5 @@ pms/
 *.seed
 *.pid.lock
 
-# Ignore custom database config
-config/db_config.js
+
+.env
