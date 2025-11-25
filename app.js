@@ -119,6 +119,7 @@ const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/docs.json', (req, res) => res.json(swaggerSpec));
+app.get('/openapi.json', (req, res) => res.json(swaggerSpec));
 
 // // socket start code
 // // ==========================================================
