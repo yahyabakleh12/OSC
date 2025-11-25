@@ -6,11 +6,11 @@ module.exports = {
   // },
   'connection': {
     'host': 'localhost',
-    'user': 'root',
-    'password': ""
+    'user': 'osc',
+    'password': "Street!123"
   },
   // 'database': 'onstreet',
-  'database': 'OnStreetOSPCloud5',
+  'database': 'OnStreetOSPCloud',
   'users_table': 'users',
   'locations_table': 'locations',
   'zones_table': 'zones',
